@@ -8,7 +8,9 @@ const connectionDB = require("./config/userDatabase.db");
 const userAuthRoute = require("./router/userAuth.route");
 
 // database connection
-connectionDB();
+if (process.env.NODE_ENV !== "test") {
+  connectionDB(); // Only connect to the database if not in test environment
+}
 
 // middleware
 app.use(cors());
@@ -19,4 +21,4 @@ app.use(express.urlencoded({ extended: false }));
 // routes
 app.use("/api/user", userAuthRoute);
 
-module.exports = app;
+module.exports = { app };

@@ -15,7 +15,7 @@ const registerValidation = (name, email, password) => {
     }
 
     if (password.length < 8 || password.length > 16) {
-      return " Password must be between 8 to 16 characters";
+      return "Password must be between 8 to 16 characters";
     }
 
     return null;
@@ -38,7 +38,7 @@ const loginValidation = (email, password) => {
     }
 
     if (password.length < 8 || password.length > 16) {
-      return " Password must be between 8 to 16 characters";
+      return "Password must be between 8 to 16 characters";
     }
 
     // more validation
