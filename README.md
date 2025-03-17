@@ -27,7 +27,8 @@ Use this project with Postman or similar tools. All routes start with `api/user`
 - `POST /api/user/register` - Register a new user.
 - `POST /api/user/login` - Login a user.
 - `POST /api/user/logout` - Logout a user.
-- `POST /api/user/forget-password` - Reset password.
+- `POST /api/user/update/:id` - update a user.
+- `PATCH /api/user/forget-password` - Reset password.
 
 Features include rate limiting, JWT token creation and verification, and secure cookie-based token storage.
 
