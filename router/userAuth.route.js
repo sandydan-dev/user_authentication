@@ -27,10 +27,17 @@ router.patch("/forget-password/:id", rateLimiter, resetPassword);
 
 // protectd routes
 router.get("/protected", verifyToken, async (req, res) => {
-  res.status(200).json({
-    message: "Protected route",
-    user: req.user,
-  });
+  try {
+    return res.status(200).json({
+      message: "Protected route",
+      user: req.user,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Error while fetching protected route",
+      error: error.message,
+    });
+  }
 });
 
 module.exports = router;
