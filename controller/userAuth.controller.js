@@ -95,12 +95,15 @@ const loginUser = async (req, res) => {
 
     // generate token
     const token = generateToken(user);
-    res.cookie("token", token);
+    res.cookie("token", token, {
+      httpOnly: true,
+    });
 
     return res.status(200).json({
       status: "success",
       message: "User logged in successfully",
       data: user,
+      token,
     });
   } catch (error) {
     res.status(500).json({

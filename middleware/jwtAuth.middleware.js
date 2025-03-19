@@ -23,28 +23,30 @@ const generateToken = (user) => {
 
 const verifyToken = async (req, res, next) => {
   try {
-    const token = req.cookies.token;
+    const authHeader = req.headers.authorization;
+    const tokenHeader = authHeader && authHeader.split(" ")[1];
+
+    const tokenCookie = req.cookies.token;
+
+    const token = tokenHeader || tokenCookie;
 
     if (!token) {
       return res.status(401).json({
         status: "failed",
-        message: "Unauthorized",
+        message: "Token not provided.",
       });
     }
 
     // verify token
     const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
-    // if not decoded give specific error message, if decoded give specific error message
     if (!decoded) {
       return res.status(401).json({
         status: "failed",
-        message: "Unauthorized",
+        message: "Unauthorized, invalid token",
       });
     }
-
     // check if user exists
     const user = await User.findById(decoded.id);
-    // give error message user not exits
     if (!user) {
       return res.status(401).json({
         status: "failed",
@@ -63,6 +65,11 @@ const verifyToken = async (req, res, next) => {
     next();
   } catch (error) {
     console.log("Error while verifying token", error);
+    return res.status(500).json({
+      status: "failed",
+      message: "Error while verifying token",
+      error: error.message,
+    });
   }
 };
 

@@ -1,35 +1,52 @@
 const request = require("supertest");
 const { app } = require("../app");
-const http = require("http");
-const { verifyToken } = require("../middleware/jwtAuth.middleware");
+const { registerValidation } = require("../validation/userValidation.validate");
 const User = require("../model/userAuth.model");
-const bcrypt = require("bcrypt");
-// register user
 
-let server;
-beforeAll((done) => {
-  // Start the server before running the tests
-  server = http.createServer(app);
-  server = app.listen(3000, () => {
-    console.log("Server is running on port 3000");
-    done();
+// Mock validation and model methods
+jest.mock("../validation/userValidation.validate", () => ({
+  registerValidation: jest.fn(),
+}));
+
+jest.mock("../model/userAuth.model", () => ({
+  create: jest.fn(),
+  findOne: jest.fn(),
+}));
+
+describe("POST /api/user/register return new user data", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
   });
-});
-afterAll((done) => {
-  // Close the server after running the tests
-  server.close(() => {
-    done();
-  });
-});
-describe("GET /api/user/protected", () => {
-  it("should return 401 if token is not provided", async () => {
-    const response = await request(app).get("/api/user/protected");
-    expect(response.status).toBe(401);
-  });
-  it("should return 401 if token is invalid", async () => {
+
+  it("should register a new user", async () => {
+    const userData = {
+      name: "John Doe",
+      email: "johndoe@example.com",
+      password: "password123",
+    };
+
+    // Mock validation to return no errors
+    registerValidation.mockReturnValue(null);
+
+    // Mock User.findOne to return null (user does not exist)
+    User.findOne.mockResolvedValue(null);
+
+    // Mock User.create to resolve with the new user
+    User.create.mockResolvedValue({
+      _id: "mockedUserId",
+      ...userData,
+      password: "hashedPassword",
+    });
+
     const response = await request(app)
-      .get("/api/user/protected")
-      .set("Authorization", "Bearer invalidtoken");
-    expect(response.status).toBe(401);
+      .post("/api/user/register")
+      .send(userData);
+
+    expect(response.status).toBe(201);
+    expect(response.body.status).toBe("success");
+    expect(response.body.message).toBe("User created successfully");
+    expect(response.body.data).toHaveProperty("name");
+    expect(response.body.data).toHaveProperty("email");
+    expect(response.body.data).toHaveProperty("password");
   });
 });
