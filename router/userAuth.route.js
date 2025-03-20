@@ -12,6 +12,7 @@ const {
   logoutUser,
   updateUser,
   resetPassword,
+  getUserData,
 } = require("../controller/userAuth.controller");
 
 // register user
@@ -24,6 +25,9 @@ router.post("/logout", logoutUser);
 router.put("/update/:id", verifyToken, updateUser);
 // forget password
 router.patch("/forget-password/:id", rateLimiter, resetPassword);
+
+// get all users data
+router.get("/data", getUserData);
 
 // protectd routes
 router.get("/protected", verifyToken, async (req, res) => {

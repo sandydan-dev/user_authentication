@@ -18,35 +18,35 @@ describe("POST /api/user/register return new user data", () => {
     jest.clearAllMocks();
   });
 
-  it("should register a new user", async () => {
-    const userData = {
-      name: "John Doe",
-      email: "johndoe@example.com",
-      password: "password123",
-    };
+    it("should register a new user", async () => {
+      const userData = {
+        name: "John Doe",
+        email: "johndoe@example.com",
+        password: "password123",
+      };
 
-    // Mock validation to return no errors
-    registerValidation.mockReturnValue(null);
+      // Mock validation to return no errors
+      registerValidation.mockReturnValue({ error: null });
 
-    // Mock User.findOne to return null (user does not exist)
-    User.findOne.mockResolvedValue(null);
+      // Mock User.findOne to return null (user does not exist)
+      User.findOne.mockResolvedValue(null);
 
-    // Mock User.create to resolve with the new user
-    User.create.mockResolvedValue({
-      _id: "mockedUserId",
-      ...userData,
-      password: "hashedPassword",
-    });
+      // Mock User.create to resolve with the new user
+      User.create.mockResolvedValue({
+        _id: "mockedUserId",
+        ...userData,
+        password: "hashedPassword",
+      });
 
-    const response = await request(app)
-      .post("/api/user/register")
-      .send(userData);
+      const response = await request(app)
+        .post("/api/user/register")
+        .send(userData)
+        .set('Content-Type', 'application/json');
 
-    expect(response.status).toBe(201);
-    expect(response.body.status).toBe("success");
-    expect(response.body.message).toBe("User created successfully");
-    expect(response.body.data).toHaveProperty("name");
-    expect(response.body.data).toHaveProperty("email");
-    expect(response.body.data).toHaveProperty("password");
-  });
-});
+      expect(response.status).toBe(201);
+      expect(response.body.status).toBe("success");
+      expect(response.body.message).toBe("User created successfully");
+      expect(response.body.data).toHaveProperty("name");
+      expect(response.body.data).toHaveProperty("email");
+      expect(response.body.data).toHaveProperty("password");
+    });});

@@ -198,6 +198,29 @@ const resetPassword = async (req, res) => {
   }
 };
 
+// get all users data
+const getUserData = async (req, res) => {
+  try {
+    const users = await User.find();
+
+    if (users.length === 0) {
+      return res.status(404).json({
+        message: "No users found",
+      });
+    }
+
+    return res.status(200).json({
+      message: "All users",
+      users,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Error while fetching users",
+      error: error.message,
+    });
+  }
+};
+
 // export controllers
 module.exports = {
   registerUser,
@@ -205,4 +228,5 @@ module.exports = {
   logoutUser,
   updateUser,
   resetPassword,
+  getUserData,
 };

@@ -24,12 +24,13 @@ This project provides secure user authentication and authorization functionaliti
 
 ## Usage
 Use this project with Postman or similar tools. All routes start with `api/user`:
- - `post request : http://localhost:5000/api/user/register ` 
+ - `post request : http://localhost:5000/api/user/register` 
  - `post request : http://localhost:5000/api/user/login`  (rate-limiter)
  - `post request : http://localhost:5000/api/user/logout`
  - `put  request : http://localhost:5000/api/user/update/(id)`
  - `get  request : http://localhost:5000/api/user/protected` // protected route with jwt token
  - `patch request : http://localhost:5000/api/user/forget-password/(id)`   (rate-limiter)
+ - `get request : http://localhost:5000/api/user/data` // get user data
 Features include rate limiting, JWT token creation and verification, and secure cookie-based token storage.
 
 ## Technologies Used
