@@ -209,13 +209,100 @@ const getUserData = async (req, res) => {
       });
     }
 
+    const userData = users.map((user) => {
+      return {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+      };
+    });
+
     return res.status(200).json({
       message: "All users",
-      users,
+      users: userData,
     });
   } catch (error) {
     return res.status(500).json({
       message: "Error while fetching users",
+      error: error.message,
+    });
+  }
+};
+
+// get user by id
+const getUserById = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const user = await User.findById(id);
+
+    if (!user.id) {
+      return {
+        status: false,
+        message: "User Id not found",
+      };
+    }
+    res.status(200).json({
+      status: true,
+      message: "User found",
+      data: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: "failed",
+      message: "Error while getting user",
+      error: error.message,
+    });
+  }
+};
+
+// find by email
+const findUserByEmail = async (req, res) => {
+  try {
+    const email = req.params.email;
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({
+        status: "failed",
+        message: "User not found",
+      });
+    }
+    res.status(200).json({
+      status: "success",
+      message: "User found",
+      data: user,
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: "failed",
+      message: "Error while getting user",
+      error: error.message,
+    });
+  }
+};
+
+// delete user permanently
+const deleteUser = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const user = await User.findByIdAndDelete(id);
+    if (!user.id) {
+      return res.status(404).json({
+        status: "failed",
+        message: "User not found",
+      });
+    }
+    res.status(200).json({
+      status: "success",
+      message: "User deleted successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: "failed",
+      message: "Error while deleting user",
       error: error.message,
     });
   }
@@ -229,4 +316,7 @@ module.exports = {
   updateUser,
   resetPassword,
   getUserData,
+  getUserById,
+  findUserByEmail,
+  deleteUser,
 };

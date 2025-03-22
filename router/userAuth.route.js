@@ -13,6 +13,9 @@ const {
   updateUser,
   resetPassword,
   getUserData,
+  getUserById,
+  findUserByEmail,
+  deleteUser
 } = require("../controller/userAuth.controller");
 
 // register user
@@ -28,6 +31,15 @@ router.patch("/forget-password/:id", rateLimiter, resetPassword);
 
 // get all users data
 router.get("/data", getUserData);
+
+// get user by id
+router.get("/userId/:id", rateLimiter, getUserById);
+
+// find user by email 
+router.get("/email/:email", findUserByEmail);
+
+// delete user 
+router.delete("/delete/:id", deleteUser);
 
 // protectd routes
 router.get("/protected", verifyToken, async (req, res) => {

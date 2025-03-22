@@ -31,6 +31,9 @@ Use this project with Postman or similar tools. All routes start with `api/user`
  - `get  request : http://localhost:5000/api/user/protected` // protected route with jwt token
  - `patch request : http://localhost:5000/api/user/forget-password/(id)`   (rate-limiter)
  - `get request : http://localhost:5000/api/user/data` // get user data
+ - `get request : http://localhost:5000/api/user/userId/67dab329b9608c791e29a0df` // get user data by id
+ - `get request : http://localhost:5000/api/user/email/john@example.com` // get user data by id
+ - `delete request : http://localhost:5000/api/user/delete/67dab329b9608c791e29a0df` // get user data by id
 Features include rate limiting, JWT token creation and verification, and secure cookie-based token storage.
 
 ## Technologies Used
