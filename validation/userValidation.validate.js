@@ -1,7 +1,7 @@
-// register validation
-const registerValidation = (name, email, password) => {
+// register validation 🟢
+const registerValidation = (username, email, password) => {
   try {
-    if (!name || typeof name !== "string") {
+    if (!username || typeof username !== "string") {
       return "Name must required and should be a string";
     }
     if (!email || typeof email !== "string") {

@@ -8,7 +8,11 @@ const connectionDB = require("./config/userDatabase.db");
 const userAuthRoute = require("./router/userAuth.route");
 
 // database connection
-connectionDB();
+connectionDB().then(() => {
+  console.log("Database connected successfully");
+}).catch((err) => {
+  console.log("Database connection failed", err);
+});
 
 // middleware
 app.use(cors());
@@ -17,6 +21,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 // routes
-app.use("/api/user", userAuthRoute);
+app.use("/api/users", userAuthRoute);
 
 module.exports = { app };

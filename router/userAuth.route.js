@@ -18,7 +18,7 @@ const {
   deleteUser
 } = require("../controller/userAuth.controller");
 
-// register user
+// register user 🟢
 router.post("/register", registerUser);
 // login user
 router.post("/login", rateLimiter, loginUser);

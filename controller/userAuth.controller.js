@@ -6,18 +6,18 @@ const {
   loginValidation,
 } = require("../validation/userValidation.validate");
 
-// register user
+// register user 🟢
 const registerUser = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { username, email, password } = req.body;
 
     // validation
-    const validationError = registerValidation(name, email, password);
+    const validationError = registerValidation(username, email, password);
 
     if (validationError) {
       return res.status(400).json({
         status: "failed",
-        message: validationError,
+        message: validationError.error,
       });
     }
     // check if user exists
@@ -35,7 +35,7 @@ const registerUser = async (req, res) => {
     const hashPassword = await bcrypt.hash(password, salt);
 
     const newUser = new User({
-      name,
+      username,
       email,
       password: hashPassword,
     });
@@ -56,7 +56,7 @@ const registerUser = async (req, res) => {
   }
 };
 
-// login user
+// login user 🟢
 const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -135,7 +135,7 @@ const logoutUser = async (req, res) => {
 const updateUser = async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, email, password } = req.body;
+    const { username, email, password } = req.body;
     const user = await User.findById(id);
     if (!user) {
       return res.status(404).json({
@@ -143,8 +143,8 @@ const updateUser = async (req, res) => {
         message: "User not found",
       });
     }
-    if (name) {
-      user.name = name;
+    if (username) {
+      user.username = username;
     }
     if (email) {
       user.email = email;
@@ -212,7 +212,7 @@ const getUserData = async (req, res) => {
     const userData = users.map((user) => {
       return {
         id: user.id,
-        name: user.name,
+        username: user.username,
         email: user.email,
       };
     });
@@ -246,7 +246,7 @@ const getUserById = async (req, res) => {
       message: "User found",
       data: {
         id: user.id,
-        name: user.name,
+        username: user.username,
         email: user.email,
       },
     });
