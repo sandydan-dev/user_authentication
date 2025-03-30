@@ -8,9 +8,9 @@ const rateLimiter = require("../middleware/rateLimite.middleware");
 const { verifyToken } = require("../middleware/jwtAuth.middleware");
 const {
   registerUser,
-  loginUser,
+  loginUser, 
   logoutUser,
-  updateUser,
+  updateUser, 
   resetPassword,
   getUserData,
   getUserById,
@@ -33,6 +33,7 @@ router.patch("/forget-password/:id", rateLimiter, resetPassword);
 router.get("/data", getUserData);
 
 // get user by id
+// endpoint: api/users/userId/:id
 router.get("/userId/:id", rateLimiter, getUserById);
 
 // find user by email 
